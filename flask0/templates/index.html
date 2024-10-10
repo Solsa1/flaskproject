@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD filmes</title>
+</head>
+<body>
+    <h1>CRUD filmes</h1>
+    <form action="/criar" method="post">
+        <input type="text" name="nome" placeholder="Digite o nome do filme" required>
+        <input type="submit" value="Inserir">
+    </form>
+    
+    <h2>Filmes listados:</h2>
+    <ul>
+        {% for filme in filmes%}
+        <li>{{ filme }}</li>
+        {% endfor %}
+    </ul>
+    <hr>
+
+    <h2>Atualizar o nome do filme:</h2>
+    <form action="/alterar" method="post">
+        <input type="text" name="old_name" placeholder="Digite o nome antigo" required>
+        <input type="text" name="new_name" placeholder="Digite o nome novo" required>
+        <input type="submit" value="Alterar">
+    </form>
+<hr>
+
+    <h2>Apagar o nome do filme:</h2>
+    <form action="/apagar" method="post">
+        <input type="text" name="nome" placeholder="Digite o nome do filme" required>
+        <input type="submit" value="Apagar">
+    </form>
+</body>
+</html>
