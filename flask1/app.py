@@ -10,46 +10,61 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 
 db = SQLAlchemy(app)
 
-class Book(db.Model):
-    title = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
+class Prato(db.Model):
+    nome = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
+    preco = db.Column(db.Float, unique=False, nullable=False, primary_key=False)
+    desc = db.Column(db.String(100), unique=True, nullable = False, primary_key=False)
 
     def __repr__(self):
-        return "<Title: {}>".format(self.title)
+        return f"<Nome: {self.nome}>\n<Preco: {self.preco}>\n<Desc: {self.desc}>"
+    
 
 with app.app_context():
     db.create_all()
 
 @app.route('/', methods=["GET", "POST"])
 def home():
-    books = None
+    pratos = None
     if request.method == "POST":
-        title = request.form.get("title")
-        if title:  # Verifica se o título não está vazio
+        nome = request.form["nome"]
+        preco = request.form["preco"]
+        desc = request.form.get("desc")
+        if nome and preco and desc:  # Verifica se o título não está vazio
             try:
-                book = Book(title=title)
-                db.session.add(book)
+                nome = Prato(nome=nome)
+                preco = Prato(preco=preco)
+                desc = Prato(desc=desc)
+                db.session.add(nome)
+                db.session.add(preco)
+                db.session.add(desc)
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()  # Faz o rollback para evitar a sessão pendente
                 print("Erro em registrar livro:", e)
         else:
             print("Erro: Título do livro não pode estar vazio.")
-    books = Book.query.all()
-    return render_template("index.html", books=books)
+    pratos = Prato.query.all()
+    return render_template("index.html", pratos=pratos)
 
 @app.route("/update", methods=["POST"])
 def update():
     try:
-        novotitulo = request.form.get("novotitulo")
-        tituloantigo = request.form.get("tituloantigo")
-        book = Book.query.filter_by(title=tituloantigo).first()
-        book.title = novotitulo
+        novoNome = request.form.get("novoNome")
+        antigoNome = request.form.get("antigoNome")
+        novoPreco = request.form.get("novoPreco")
+        antigoPreco = request.form.get("antigoPreco")
+        novoDesc = request.form.get("novoDesc")
+        antigoDesc = request.form.get("antigoDesc")
+        prato = Prato.query.filter_by(nome=antigoNome).first()
+        prato.nome = novoNome
+        prato.preco = novoPreco
+        prato.desc = novoDesc
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         print("Não foi possível atualizar o livro:", e)
     return redirect("/")
-
+'''
 @app.route("/delete", methods=["POST"])
 def delete():
     title = request.form.get("title")
@@ -64,6 +79,6 @@ def delete():
         db.session.rollback()
         print("Não foi possível deletar o livro:", e)
     return redirect("/")
-
+'''
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
