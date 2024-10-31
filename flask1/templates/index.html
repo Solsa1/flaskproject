@@ -6,25 +6,40 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Adicionar livro</h1>
+    <h1>Adicionar prato</h1>
     <form method="POST" action="/">
-        <input type="text" name="title">
+        <input type="text" name="nome">
+        <input type="text" name="preco">
+        <input type="text" name="desc">
         <input type="submit" value="adicionar">
     </form>
 
-    <h1>Livros</h1>
+    <h1>Prato</h1>
     <table>
-        {% for book in books %}
+        {% for prato in pratos %}
             <tr>
                 <td>
-                    {{book.title}}
+                    {{prato.nome}}
+                    {{prato.preco}}
+                    {{prato.desc}}
                 </td>
                 <td>
                     <form method="POST" action="/update" style="display: inline">
-                        <input type="hidden" value="{{ book.title }}" name="tituloantigo">
-                        <input type="text" value="{{ book.title }}" name="novotitulo">
+                        <input type="hidden" value="{{ prato.nome }}" name="antigoNome">
+                        <input type="text" value="{{ prato.nome }}" name="novoNome">
+                        <input type="hidden" value="{{ prato.preco}}" name="antigoPreco">
+                        <input type="text" value="{{ prato.preco }}" name="novoPreco">
+                        <input type="hidden" value="{{ prato.desc }}" name="antigoDesc">
+                        <input type="text" value="{{ prato.desc }}" name="novoDesc">
                         <input type="submit" value="update">
                     </form>
+                </td>
+                <td>
+                  <!--<form method="POST" action="/delete" style="display: inline">
+                    <input type="hidden" value="{{book.title}}" name="title">    
+                    <input type="submit" value="delete">    
+                    </form>
+                    -->  
                 </td>
             </tr>
             {% endfor %}
